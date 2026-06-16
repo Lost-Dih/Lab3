@@ -20,23 +20,32 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         moveInput = moveAction.ReadValue<Vector2>();
+        ConstraintPlayerPosition(); //Calls function to constrain player position within boundaries
+    }
 
-        if(transform.position.z < -zBoundary)
+    void ConstraintPlayerPosition()
+    {
+        if(transform.position.z < -zBoundary) //Checks if player has moved beyond the negative z boundary
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, -zBoundary);
         }
-         else if(transform.position.z > zBoundary)
+         else if(transform.position.z > zBoundary) //Checks if player has moved beyond the positive z boundary
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, zBoundary);
         }
     }
 
-    private void FixedUpdate()
+    void MovePlayer()
     {
         float horizontalInput = moveInput.x;
         float verticalInput = moveInput.y;
 
-        Vector3 moveDirection = new Vector3(horizontalInput, 0.0f, verticalInput);
-        playerRigidbody.AddForce(moveDirection * speed);
+        Vector3 moveDirection = new Vector3(horizontalInput, 0.0f, verticalInput); //Creates a movement direction vector based on the player's input
+        playerRigidbody.AddForce(moveDirection * speed); //Applies a force to the player's Rigidbody in the direction of movement, scaled by the speed variable
+    }
+
+    void FixedUpdate()
+    {
+        MovePlayer();
     }
 }
